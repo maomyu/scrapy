@@ -2,32 +2,20 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"net/http"
 
-	"github.com/PuerkitoBio/goquery"
+	"github.com/yuwe1/scrapy/gofish"
+	"github.com/yuwe1/scrapy/handle"
 )
 
 func main() {
-	authers := "https://so.gushiwen.org/authors/"
-	res, err := http.Get(authers)
+	baseurl := "https://so.gushiwen.org/authors/"
+	h := handle.AuthorHandle{}
+	fish := gofish.NewGoFish()
+	request, err := gofish.NewRequest("GET", baseurl, gofish.UserAgent, &h, nil)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
-	defer res.Body.Close()
-	if res.StatusCode != 200 {
-		log.Fatalf("status code error: %d %s", res.StatusCode, res.Status)
-	}
-	doc, err := goquery.NewDocumentFromReader(res.Body)
-	if err != nil {
-		fmt.Errorf("doc err", err)
-	}
-	doc.Find(".sons").Find(".cont").Find("a").Each(func(i int, s *goquery.Selection) {
-		// 输出内容
-		auther := s.Text()
-		fmt.Printf("%d auther=%s\n", i, auther)
-		link, _ := s.Attr("href")
-		fmt.Println(i, "link = ", link)
-	})
-
+	fish.Request = request
+	fish.Visit()
 }
