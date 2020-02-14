@@ -17,7 +17,7 @@ const (
 )
 
 func init() {
-	db, err = sql.Open("mysql", "root:mysql3306recycle072829@(112.124.31.82:3306)/poem?charset=utf8&parseTime=true&loc=Asia%2FShanghai")
+	db, err = sql.Open("mysql", "root:mysql3306recycle072829@(127.0.0.1:3306)/poem?charset=utf8&parseTime=true&loc=Asia%2FShanghai")
 	if err != nil {
 		panic(err)
 	}
